@@ -3,6 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <vk_mem_alloc.h>
+#include "vk_mesh.h"
 
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
@@ -74,8 +75,9 @@ public:
 
 	//Inputs for this object
 	VkPipelineLayout _quadPipelineLayout;
-
 	VkPipeline _quadPipeline;
+
+	Mesh _quadMesh;
 
 private:
 	void init_vulkan();
@@ -95,4 +97,8 @@ private:
 	void init_framebuffers();
 
 	void init_sync_structures();
+
+	void load_meshes();
+
+	void upload_mesh(Mesh& mesh);
 };

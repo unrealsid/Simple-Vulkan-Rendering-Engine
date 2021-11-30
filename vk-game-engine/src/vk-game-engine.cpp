@@ -42,6 +42,8 @@ void VulkanEngine::init()
 
 	init_pipelines();
 
+	load_meshes();
+
 	//everything went fine
 	_isInitialized = true;
 }
@@ -125,7 +127,12 @@ void VulkanEngine::draw()
 	//once we start adding rendering commands, they will go here
 
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipeline);
-	vkCmdDraw(cmd, 6, 1, 0, 0);
+
+	VkDeviceSize offset = 0;
+
+	vkCmdBindVertexBuffers(cmd, 0, 1, &_quadMesh._vertexBuffer._buffer, &offset);
+
+	vkCmdDraw(cmd, _quadMesh._vertices.size(), 1, 0, 0);
 
 	//finalize the render pass
 	vkCmdEndRenderPass(cmd);

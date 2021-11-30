@@ -24,8 +24,11 @@
     <ClCompile Include="src\vk-game-engine.cpp" />
     <ClCompile Include="src\vk_draw_init.cpp" />
     <ClCompile Include="src\vk_initializers.cpp" />
+    <ClCompile Include="src\vk_mesh.cpp" />
+    <ClCompile Include="src\vk_mesh_init.cpp" />
     <ClCompile Include="src\vk_pipeline_builder.cpp" />
     <ClCompile Include="src\vk_pipeline_init.cpp" />
+    <ClCompile Include="src\vk_types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Libraries\vk-bootstrap-master\vk-bootstrap-master\src\VkBootstrap.h" />
