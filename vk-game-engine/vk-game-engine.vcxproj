@@ -22,12 +22,19 @@
     <ClCompile Include="..\..\..\Libraries\vk-bootstrap-master\vk-bootstrap-master\src\VkBootstrap.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vk-game-engine.cpp" />
+    <ClCompile Include="src\vk_draw_init.cpp" />
     <ClCompile Include="src\vk_initializers.cpp" />
+    <ClCompile Include="src\vk_pipeline_builder.cpp" />
+    <ClCompile Include="src\vk_pipeline_init.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Libraries\vk-bootstrap-master\vk-bootstrap-master\src\VkBootstrap.h" />
+    <ClInclude Include="src\vk_shader_config.h" />
     <ClInclude Include="src\vk-game-engine.h" />
     <ClInclude Include="src\vk_initializers.h" />
+    <ClInclude Include="src\vk_mesh.h" />
+    <ClInclude Include="src\vk_pipeline_builder.h" />
+    <ClInclude Include="src\vk_types.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

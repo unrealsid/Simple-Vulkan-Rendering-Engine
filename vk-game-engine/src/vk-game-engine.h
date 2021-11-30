@@ -2,6 +2,19 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
+#include <vk_mem_alloc.h>
+
+//we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
+#define VK_CHECK(x)                                                 \
+	do                                                              \
+	{                                                               \
+		VkResult err = x;                                           \
+		if (err)                                                    \
+		{                                                           \
+			std::cout <<"Detected Vulkan error: " << err << std::endl; \
+			abort();                                                \
+		}                                                           \
+	} while (0)				\
 
 class VulkanEngine
 {
@@ -56,12 +69,26 @@ public:
 	VkSemaphore _presentSemaphore, _renderSemaphore;
 	VkFence _renderFence;
 
+	//VMA Library allocator
+	VmaAllocator _allocator;
+
+	//Inputs for this object
+	VkPipelineLayout _quadPipelineLayout;
+
+	VkPipeline _quadPipeline;
+
 private:
 	void init_vulkan();
+
+	void init_vma();
 
 	void init_swapchain();
 
 	void init_commands();
+
+	void init_pipelines();
+
+	bool load_shader_module(const char* filePath, VkShaderModule* outShaderModule);
 
 	void init_default_renderpass();
 
