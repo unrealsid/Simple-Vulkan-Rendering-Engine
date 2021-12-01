@@ -4,6 +4,7 @@
 #include <vector>
 #include <vk_mem_alloc.h>
 #include "vk_mesh.h"
+#include "vk_frame_data.h"
 
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
@@ -79,6 +80,13 @@ public:
 
 	Mesh _quadMesh;
 
+	AllocatedBuffer create_buffer(size_t allocSize, VkBufferUsageFlags usage, VmaMemoryUsage memoryUsage);
+
+	FrameData _frameData;
+
+	VkDescriptorSetLayout _globalSetLayout;
+	VkDescriptorPool _descriptorPool;
+
 private:
 	void init_vulkan();
 
@@ -97,6 +105,8 @@ private:
 	void init_framebuffers();
 
 	void init_sync_structures();
+
+	void init_descriptors();
 
 	void load_meshes();
 

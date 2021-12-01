@@ -81,6 +81,9 @@ void VulkanEngine::init_pipelines()
 	//we are not using descriptor sets or other systems yet, so no need to use anything other than empty default
 	VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
 
+	pipeline_layout_info.setLayoutCount = 1;
+	pipeline_layout_info.pSetLayouts = &_globalSetLayout;
+
 	VK_CHECK(vkCreatePipelineLayout(_device, &pipeline_layout_info, nullptr, &_quadPipelineLayout));
 
 	//build the stage-create-info for both vertex and fragment stages. This lets the pipeline know the shader modules per stage

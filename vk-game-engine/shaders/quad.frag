@@ -3,11 +3,16 @@
 
 layout (location = 0) in vec3 inColor;
 
+layout(set = 0, binding = 0) uniform GlobalData
+{   
+	float time;
+} globalData;
+
 //output write
 layout (location = 0) out vec4 outFragColor;
 
 void main()
 {
 	//return red
-	outFragColor = vec4(inColor,1.0f);
+	outFragColor = vec4(inColor + vec3(globalData.time), 1.0f);
 }

@@ -8,6 +8,7 @@
 
 #define VMA_IMPLEMENTATION
 #include "vk_mem_alloc.h"
+#include "vk_global_data.h"
 
 void VulkanEngine::init()
 {
@@ -39,6 +40,8 @@ void VulkanEngine::init()
 	init_framebuffers();
 
 	init_sync_structures();
+
+	init_descriptors();
 
 	init_pipelines();
 
@@ -125,12 +128,22 @@ void VulkanEngine::draw()
 	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 	//once we start adding rendering commands, they will go here
-
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipeline);
+
+	void* data;
+	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, &data);
+
+	GlobalData frameData;
+	frameData.time = abs(sin(_frameNumber / 120.f));
+
+	memcpy(data, &frameData, sizeof(GlobalData));
+
+	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
 
 	VkDeviceSize offset = 0;
 
 	vkCmdBindVertexBuffers(cmd, 0, 1, &_quadMesh._vertexBuffer._buffer, &offset);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 0, 1, &_frameData.globalDescriptor, 0, nullptr);
 
 	vkCmdDraw(cmd, _quadMesh._vertices.size(), 1, 0, 0);
 
