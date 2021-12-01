@@ -1,5 +1,5 @@
 #include <iostream>
-#include "vk-game-engine.h"
+#include "vk_game_engine.h"
 
 int main(int argc, char* argv[])
 {
