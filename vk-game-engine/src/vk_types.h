@@ -7,3 +7,21 @@ struct AllocatedBuffer
 	VkBuffer _buffer;
 	VmaAllocation _allocation;
 };
+
+struct AllocatedImage 
+{
+	VkImage _image;
+	VmaAllocation _allocation;
+};
+
+struct Texture
+{
+	AllocatedImage image;
+	VkImageView imageView;
+};
+
+struct UploadContext 
+{
+	VkFence _uploadFence;
+	VkCommandPool _commandPool;
+};

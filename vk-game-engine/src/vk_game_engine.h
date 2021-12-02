@@ -3,6 +3,7 @@
 #include <vulkan/vulkan.h>
 #include <vector>
 #include <vk_mem_alloc.h>
+#include <functional>
 #include "vk_mesh.h"
 #include "vk_frame_data.h"
 #include "vk_global_data.h"
@@ -92,6 +93,12 @@ public:
 
 	VkPhysicalDeviceProperties _gpuProperties;
 
+	UploadContext _uploadContext;
+
+	Texture _loadedTexture;
+
+	void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
+
 private:
 	void init_vulkan();
 
@@ -116,6 +123,8 @@ private:
 	size_t pad_uniform_buffer_size(size_t originalSize);
 
 	void load_meshes();
+
+	void load_images();
 
 	void upload_mesh(Mesh& mesh);
 	
