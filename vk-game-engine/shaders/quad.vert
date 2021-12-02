@@ -9,6 +9,14 @@ layout (location = 1 ) in vec3 vNormal;
 layout (location = 2 ) in vec3 vColor;
 layout (location = 3 ) in vec2 uv;
 
+layout(set = 0, binding = 0) uniform  CameraBuffer
+{
+	mat4 view;
+	mat4 proj;
+	mat4 viewProjection;
+	vec4 translate;
+} cameraData;
+
 
 void main()
 {
@@ -39,6 +47,6 @@ void main()
 	);
 
 	//output the position of each vertex
-	gl_Position = vec4(vPosition, 1.0f);
+	gl_Position = vec4(vPosition + vec3(cameraData.translate), 1.0f);
 	outColor = vColor;
 }

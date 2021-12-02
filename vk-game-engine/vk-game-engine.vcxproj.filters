@@ -16,6 +16,9 @@
     <Filter Include="libs">
       <UniqueIdentifier>{7f1179c5-cbc5-43cd-903f-62e5efb9581e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{aa334b49-5e53-4209-9ff0-ac94987a107f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp">
@@ -54,6 +57,9 @@
     <ClCompile Include="src\vk_game_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\vk_descriptor_write.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vk_initializers.h">
@@ -83,5 +89,13 @@
     <ClInclude Include="src\vk_game_engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\quad.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\quad.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -5,6 +5,7 @@
 #include <vk_mem_alloc.h>
 #include "vk_mesh.h"
 #include "vk_frame_data.h"
+#include "vk_global_data.h"
 
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
@@ -84,8 +85,12 @@ public:
 
 	FrameData _frameData;
 
+	GPUCameraData _cameraData;
+
 	VkDescriptorSetLayout _globalSetLayout;
 	VkDescriptorPool _descriptorPool;
+
+	VkPhysicalDeviceProperties _gpuProperties;
 
 private:
 	void init_vulkan();
@@ -108,7 +113,11 @@ private:
 
 	void init_descriptors();
 
+	size_t pad_uniform_buffer_size(size_t originalSize);
+
 	void load_meshes();
 
 	void upload_mesh(Mesh& mesh);
+	
+	void update_descriptors();
 };

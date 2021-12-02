@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Libraries\vk-bootstrap-master\vk-bootstrap-master\src\VkBootstrap.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\vk_descriptor_write.cpp" />
     <ClCompile Include="src\vk_game_engine.cpp" />
     <ClCompile Include="src\vk_buffer_init.cpp" />
     <ClCompile Include="src\vk_draw_init.cpp" />
@@ -42,6 +43,10 @@
     <ClInclude Include="src\vk_mesh.h" />
     <ClInclude Include="src\vk_pipeline_builder.h" />
     <ClInclude Include="src\vk_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\quad.frag" />
+    <None Include="shaders\quad.vert" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

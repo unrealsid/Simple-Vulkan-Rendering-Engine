@@ -130,15 +130,7 @@ void VulkanEngine::draw()
 	//once we start adding rendering commands, they will go here
 	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipeline);
 
-	void* data;
-	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, &data);
-
-	GlobalData frameData;
-	frameData.time = abs(sin(_frameNumber / 120.f));
-
-	memcpy(data, &frameData, sizeof(GlobalData));
-
-	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
+	update_descriptors();
 
 	VkDeviceSize offset = 0;
 
@@ -265,6 +257,10 @@ void VulkanEngine::init_vulkan()
 	_graphicsQueueFamily = vkbDevice.get_queue_index(vkb::QueueType::graphics).value();
 
 	init_vma();
+
+	vkGetPhysicalDeviceProperties(_chosenGPU, &_gpuProperties);
+
+	std::cout << "The GPU has a minimum buffer alignment of " << _gpuProperties.limits.minUniformBufferOffsetAlignment << std::endl;
 }
 
 void VulkanEngine::init_vma()

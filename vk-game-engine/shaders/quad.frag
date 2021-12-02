@@ -3,7 +3,7 @@
 
 layout (location = 0) in vec3 inColor;
 
-layout(set = 0, binding = 0) uniform GlobalData
+layout(set = 0, binding = 1) uniform GlobalData
 {   
 	float time;
 } globalData;

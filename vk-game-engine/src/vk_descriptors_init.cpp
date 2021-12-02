@@ -1,6 +1,7 @@
 #include "vk_game_engine.h"
 #include <iostream>
 #include "vk_global_data.h"
+#include "vk_initializers.h"
 
 void VulkanEngine::init_descriptors()
 {
@@ -20,29 +21,27 @@ void VulkanEngine::init_descriptors()
 	vkCreateDescriptorPool(_device, &pool_info, nullptr, &_descriptorPool);
 
 	//information about the binding.
-	VkDescriptorSetLayoutBinding globalFrameDataBufferBinding = {};
-	globalFrameDataBufferBinding.binding = 0;
-	globalFrameDataBufferBinding.descriptorCount = 1;
-	// it's a uniform buffer binding
-	globalFrameDataBufferBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	VkDescriptorSetLayoutBinding cameraBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0);
 
-	// we use it from the fragment shader
-	globalFrameDataBufferBinding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+	VkDescriptorSetLayoutBinding globalFrameDataBufferBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 1);
+
+	VkDescriptorSetLayoutBinding bindings[] = { cameraBinding, globalFrameDataBufferBinding };
 
 	VkDescriptorSetLayoutCreateInfo setInfo = {};
 	setInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	setInfo.pNext = nullptr;
 
 	//we are going to have 1 binding
-	setInfo.bindingCount = 1;
+	setInfo.bindingCount = 2;
 	//no flags
 	setInfo.flags = 0;
 	//point to the camera buffer binding
-	setInfo.pBindings = &globalFrameDataBufferBinding;
+	setInfo.pBindings = bindings;
 
 	vkCreateDescriptorSetLayout(_device, &setInfo, nullptr, &_globalSetLayout);
 
-	_frameData.globalFrameDataBuffer = create_buffer(sizeof(GlobalData), VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData) + sizeof(GPUCameraData));
+	_frameData.globalFrameDataBuffer = create_buffer(sceneParamBufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
 
 	//allocate one descriptor set for this frame
 	VkDescriptorSetAllocateInfo allocInfo = {};
@@ -58,27 +57,36 @@ void VulkanEngine::init_descriptors()
 	vkAllocateDescriptorSets(_device, &allocInfo, &_frameData.globalDescriptor);
 
 	//information about the buffer we want to point at in the descriptor
-	VkDescriptorBufferInfo binfo;
+	VkDescriptorBufferInfo cameraInfo;
+	cameraInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
+	cameraInfo.offset = 0;
+	cameraInfo.range = sizeof(GPUCameraData);
+
+	VkDescriptorBufferInfo sceneInfo;
 	//it will be the camera buffer
-	binfo.buffer = _frameData.globalFrameDataBuffer._buffer;
+	sceneInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
 	//at 0 offset
-	binfo.offset = 0;
+	sceneInfo.offset = pad_uniform_buffer_size(sizeof(GlobalData));
 	//of the size of a global data struct
-	binfo.range = sizeof(GlobalData);
+	sceneInfo.range = sizeof(GlobalData);
 
-	VkWriteDescriptorSet setWrite = {};
-	setWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-	setWrite.pNext = nullptr;
+	VkWriteDescriptorSet cameraWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &cameraInfo, 0);
 
-	//we are going to write into binding number 0
-	setWrite.dstBinding = 0;
-	//of the global descriptor
-	setWrite.dstSet = _frameData.globalDescriptor;
+	VkWriteDescriptorSet sceneWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &sceneInfo, 1);
 
-	setWrite.descriptorCount = 1;
-	//and the type is uniform buffer
-	setWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	setWrite.pBufferInfo = &binfo;
+	VkWriteDescriptorSet setWrites[] = { cameraWrite, sceneWrite  };
 
-	vkUpdateDescriptorSets(_device, 1, &setWrite, 0, nullptr);
+	vkUpdateDescriptorSets(_device, 2, setWrites, 0, nullptr);
+}
+
+size_t VulkanEngine::pad_uniform_buffer_size(size_t originalSize)
+{
+	// Calculate required alignment based on minimum device offset alignment
+	size_t minUboAlignment = _gpuProperties.limits.minUniformBufferOffsetAlignment;
+	size_t alignedSize = originalSize;
+	if (minUboAlignment > 0)
+	{
+		alignedSize = (alignedSize + minUboAlignment - 1) & ~(minUboAlignment - 1);
+	}
+	return alignedSize;
 }
