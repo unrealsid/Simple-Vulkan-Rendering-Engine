@@ -21,18 +21,20 @@ void VulkanEngine::init_descriptors()
 	vkCreateDescriptorPool(_device, &pool_info, nullptr, &_descriptorPool);
 
 	//information about the binding.
-	VkDescriptorSetLayoutBinding cameraBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0);
+	VkDescriptorSetLayoutBinding objectBinding1 = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0);
 
 	VkDescriptorSetLayoutBinding globalFrameDataBufferBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 1);
 
-	VkDescriptorSetLayoutBinding bindings[] = { cameraBinding, globalFrameDataBufferBinding };
+	VkDescriptorSetLayoutBinding objectBinding2 = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 2);
+
+	VkDescriptorSetLayoutBinding bindings[] = { objectBinding1, globalFrameDataBufferBinding, objectBinding2 };
 
 	VkDescriptorSetLayoutCreateInfo setInfo = {};
 	setInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	setInfo.pNext = nullptr;
 
 	//we are going to have 1 binding
-	setInfo.bindingCount = 2;
+	setInfo.bindingCount = 3;
 	//no flags
 	setInfo.flags = 0;
 	//point to the camera buffer binding
@@ -40,7 +42,7 @@ void VulkanEngine::init_descriptors()
 
 	vkCreateDescriptorSetLayout(_device, &setInfo, nullptr, &_globalSetLayout);
 
-	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData) + sizeof(GPUCameraData));
+	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData)) + pad_uniform_buffer_size(sizeof(ObjectData1)) + pad_uniform_buffer_size(sizeof(ObjectData2));
 	_frameData.globalFrameDataBuffer = create_buffer(sceneParamBufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
 
 	//allocate one descriptor set for this frame
@@ -57,26 +59,36 @@ void VulkanEngine::init_descriptors()
 	vkAllocateDescriptorSets(_device, &allocInfo, &_frameData.globalDescriptor);
 
 	//information about the buffer we want to point at in the descriptor
-	VkDescriptorBufferInfo cameraInfo;
-	cameraInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
-	cameraInfo.offset = 0;
-	cameraInfo.range = sizeof(GPUCameraData);
+	VkDescriptorBufferInfo objectData1Info;
+	objectData1Info.buffer = _frameData.globalFrameDataBuffer._buffer;
+	objectData1Info.offset = 0;
+	objectData1Info.range = sizeof(ObjectData1);
 
 	VkDescriptorBufferInfo sceneInfo;
 	//it will be the camera buffer
 	sceneInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
-	//at 0 offset
+	//at an offset defined by the distance to a GlobalData Structs
 	sceneInfo.offset = pad_uniform_buffer_size(sizeof(GlobalData));
 	//of the size of a global data struct
 	sceneInfo.range = sizeof(GlobalData);
+	
+	VkDescriptorBufferInfo objectData2Info;
+	//Which buffer
+	objectData2Info.buffer = _frameData.globalFrameDataBuffer._buffer;
+	//at an offset that will be object data
+	objectData2Info.offset = pad_uniform_buffer_size(sizeof(ObjectData2)) + pad_uniform_buffer_size(sizeof(GlobalData));
+	//of the size of a global data struct
+	objectData2Info.range = sizeof(ObjectData2);
 
-	VkWriteDescriptorSet cameraWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &cameraInfo, 0);
+	VkWriteDescriptorSet objectData1Write = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &objectData1Info, 0);
 
 	VkWriteDescriptorSet sceneWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &sceneInfo, 1);
 
-	VkWriteDescriptorSet setWrites[] = { cameraWrite, sceneWrite  };
+	VkWriteDescriptorSet objectData2Write = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &objectData2Info, 2);
 
-	vkUpdateDescriptorSets(_device, 2, setWrites, 0, nullptr);
+	VkWriteDescriptorSet setWrites[] = { objectData1Write, sceneWrite, objectData2Write };
+
+	vkUpdateDescriptorSets(_device, 3, setWrites, 0, nullptr);
 }
 
 size_t VulkanEngine::pad_uniform_buffer_size(size_t originalSize)

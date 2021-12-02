@@ -3,16 +3,20 @@
 
 struct GlobalData
 {
+	glm::vec4 lightDir = glm::vec4();
+
 	//Current time
-	glm::vec4 time = glm::vec4();
+	 alignas(4) float time = 0.0f;
 };
 
 //Stores camera transforms
-struct GPUCameraData
+struct ObjectData1
 {
-	glm::mat4 view = glm::mat4();
-	glm::mat4 projection = glm::mat4();
-	glm::mat4 viewprojection = glm::mat4();
+	alignas(4) float translationSine = 0.0f;
+};
 
-	glm::vec4 translation = glm::vec4();
+//Stores object Data
+struct ObjectData2
+{
+	alignas(4) float translationCosine = 0.0f;
 };

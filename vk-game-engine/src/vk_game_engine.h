@@ -85,8 +85,6 @@ public:
 
 	FrameData _frameData;
 
-	GPUCameraData _cameraData;
-
 	VkDescriptorSetLayout _globalSetLayout;
 	VkDescriptorPool _descriptorPool;
 
