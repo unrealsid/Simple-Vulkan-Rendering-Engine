@@ -41,11 +41,11 @@ void VulkanEngine::init()
 
 	init_sync_structures();
 
+	load_images();
+
 	init_descriptors();
 
 	init_pipelines();
-
-	load_images();
 
 	load_meshes();
 
@@ -138,6 +138,7 @@ void VulkanEngine::draw()
 
 	vkCmdBindVertexBuffers(cmd, 0, 1, &_quadMesh._vertexBuffer._buffer, &offset);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 0, 1, &_frameData.globalDescriptor, 0, nullptr);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 1, 1, &textureSet, 0, nullptr);
 
 	vkCmdDraw(cmd, _quadMesh._vertices.size(), 1, 0, 0);
 

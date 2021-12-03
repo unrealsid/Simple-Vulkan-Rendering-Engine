@@ -96,8 +96,11 @@ public:
 	UploadContext _uploadContext;
 
 	Texture _loadedTexture;
+	VkDescriptorSet textureSet{ VK_NULL_HANDLE };
 
 	void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
+
+	VkDescriptorSetLayout _singleTextureSetLayout;
 
 private:
 	void init_vulkan();
@@ -119,6 +122,10 @@ private:
 	void init_sync_structures();
 
 	void init_descriptors();
+
+	void init_uniform_buffer_descriptors();
+
+	void init_texture_descriptors();
 
 	size_t pad_uniform_buffer_size(size_t originalSize);
 
