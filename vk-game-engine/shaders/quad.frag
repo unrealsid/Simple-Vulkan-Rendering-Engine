@@ -38,7 +38,7 @@ float flame(vec3 p)
 
 float scene(vec3 p)
 {
-	return min(100.-length(p) , abs(flame(p)) );
+	return min(100.-length(p) , abs(flame(p)));
 }
 
 vec4 raymarch(vec3 org, vec3 dir)
@@ -51,6 +51,7 @@ vec4 raymarch(vec3 org, vec3 dir)
 	{
 		d = scene(p) + eps;
 		p += d * dir;
+
 		if( d>eps )
 		{
 			if(flame(p) < .0)
@@ -65,7 +66,8 @@ vec4 raymarch(vec3 org, vec3 dir)
 void main()
 {
 	vec2 v = -1.0 + 2.0 * gl_FragCoord.xy / shaderInputs.resolution.xy;
-	v.x *= shaderInputs.resolution.x/shaderInputs.resolution.y;
+	v.x *= shaderInputs.resolution.x / shaderInputs.resolution.y;
+	v.y *= -1.f;
 	
 	vec3 org = vec3(0., -2., 4.);
 	vec3 dir = normalize(vec3(v.x*1.6, -v.y, -1.5));
@@ -73,11 +75,10 @@ void main()
 	vec4 p = raymarch(org, dir);
 	float glow = p.w;
 	
-	vec4 col = mix(vec4(1.,.5,.1,1.), vec4(0.1,.5,1.,1.), p.y*.02+.4);
+	vec4 col = mix(vec4(1.,.5,.1,1.), vec4(0.1,.5,1.,1.), p.y * .02 + .4);
 	
 	outFragColor = mix(vec4(0.), col, pow(glow*2.,4.));
 	//fragColor = mix(vec4(1.), mix(vec4(1.,.5,.1,1.),vec4(0.1,.5,1.,1.),p.y*.02+.4), pow(glow*2.,4.));
-
 }
 
 
