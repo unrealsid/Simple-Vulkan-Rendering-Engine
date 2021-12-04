@@ -103,5 +103,8 @@
     <None Include="shaders\quad.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\galaxy.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>
