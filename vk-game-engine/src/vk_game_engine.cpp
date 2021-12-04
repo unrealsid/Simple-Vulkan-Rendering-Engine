@@ -26,6 +26,10 @@ void VulkanEngine::init()
 		window_flags
 	);
 
+	auto duration = std::chrono::system_clock::now().time_since_epoch();
+	auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration).count();
+
+	appStartTime = std::chrono::high_resolution_clock::now();
 
 	//load the core Vulkan structures
 	init_vulkan();

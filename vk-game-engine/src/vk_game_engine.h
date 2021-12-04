@@ -7,6 +7,7 @@
 #include "vk_mesh.h"
 #include "vk_frame_data.h"
 #include "vk_global_data.h"
+#include <chrono>
 
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
@@ -86,21 +87,19 @@ public:
 
 	FrameData _frameData;
 
-	GPUCameraData _cameraData;
-
 	VkDescriptorSetLayout _globalSetLayout;
 	VkDescriptorPool _descriptorPool;
 
-	VkPhysicalDeviceProperties _gpuProperties;
-
-	UploadContext _uploadContext;
-
+	VkDescriptorSetLayout _singleTextureSetLayout;
 	Texture _loadedTexture;
 	VkDescriptorSet textureSet{ VK_NULL_HANDLE };
 
 	void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
 
-	VkDescriptorSetLayout _singleTextureSetLayout;
+	VkPhysicalDeviceProperties _gpuProperties;
+	UploadContext _uploadContext;
+
+	std::chrono::steady_clock::time_point appStartTime;
 
 private:
 	void init_vulkan();

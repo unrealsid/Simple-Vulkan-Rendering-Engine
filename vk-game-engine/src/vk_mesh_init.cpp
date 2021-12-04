@@ -8,14 +8,14 @@ void VulkanEngine::load_meshes()
 
 	//vertex positions
 	//Tri 1
-	_quadMesh._vertices[0].position = { -0.5f, -0.5f, 0.0f };
-	_quadMesh._vertices[1].position = { 0.5f, -0.5f, 0.0f };
-	_quadMesh._vertices[2].position = { 0.5f, 0.5f, 0.0f };
+	_quadMesh._vertices[0].position = { -1.0f, -1.0f, 0.0f };
+	_quadMesh._vertices[1].position = { 1.0f, -1.0f, 0.0f };
+	_quadMesh._vertices[2].position = { 1.0f, 1.0f, 0.0f };
 
 	//Tri2
-	_quadMesh._vertices[3].position = { 0.5f, 0.5f, 0.0f };
-	_quadMesh._vertices[4].position = { -0.5f,  0.5f, 0.0f };
-	_quadMesh._vertices[5].position = { -0.5f,  -0.5f, 0.0f };
+	_quadMesh._vertices[3].position = { 1.0f, 1.0f, 0.0f };
+	_quadMesh._vertices[4].position = { -1.0f, 1.0f, 0.0f };
+	_quadMesh._vertices[5].position = { -1.0f, -1.0f, 0.0f };
 
 	//vertex colors, all green
 	_quadMesh._vertices[0].color = { 1.f, 1.f, 0.0f }; //pure green

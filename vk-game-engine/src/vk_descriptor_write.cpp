@@ -1,32 +1,23 @@
 #include "vk_game_engine.h"
+#include <iostream>
 
 void VulkanEngine::update_descriptors()
 {
 	//Binding 0 in the buffer
-	//Vertex
-	char* vertexData;
-	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, (void**)&vertexData);
-
-	float sine = abs(sin(_frameNumber / 120.f));
-
-	_cameraData.view = glm::mat4();
-	_cameraData.translation.x = sine;
-
-	memcpy(vertexData, &_cameraData, sizeof(GPUCameraData));
-
-	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
-
-
-	//Binding 1 in the buffer
 	//Fragment
 	char* fragmentData;
 	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, (void**)&fragmentData);
 
-	GlobalData frameData;
-	frameData.time.x = sine;
+	auto current_time = std::chrono::high_resolution_clock::now();
+	auto seconds = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - appStartTime).count();
 
-	fragmentData += pad_uniform_buffer_size(sizeof(GlobalData));
-	memcpy(fragmentData, &frameData, sizeof(GlobalData));
+	ShaderInputs frameData;
+	frameData.time.x = seconds * 0.001;
+
+	std::cout << frameData.time.x << std::endl;
+	frameData.resolution = glm::vec4(_windowExtent.width, _windowExtent.height, 0, 0);
+
+	memcpy(fragmentData, &frameData, sizeof(ShaderInputs));
 
 	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
 }

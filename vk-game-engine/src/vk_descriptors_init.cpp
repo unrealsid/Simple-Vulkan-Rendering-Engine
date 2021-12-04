@@ -29,18 +29,16 @@ void VulkanEngine::init_descriptors()
 void VulkanEngine::init_uniform_buffer_descriptors()
 {
 	//information about the binding.
-	VkDescriptorSetLayoutBinding cameraBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0);
+	VkDescriptorSetLayoutBinding globalFrameDataBufferBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 0);
 
-	VkDescriptorSetLayoutBinding globalFrameDataBufferBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, VK_SHADER_STAGE_FRAGMENT_BIT, 1);
-
-	VkDescriptorSetLayoutBinding bindings[] = { cameraBinding, globalFrameDataBufferBinding };
+	VkDescriptorSetLayoutBinding bindings[] = { globalFrameDataBufferBinding };
 
 	VkDescriptorSetLayoutCreateInfo setInfo = {};
 	setInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 	setInfo.pNext = nullptr;
 
 	//we are going to have 1 binding
-	setInfo.bindingCount = 2;
+	setInfo.bindingCount = 1;
 	//no flags
 	setInfo.flags = 0;
 	//point to the camera buffer binding
@@ -48,7 +46,7 @@ void VulkanEngine::init_uniform_buffer_descriptors()
 
 	vkCreateDescriptorSetLayout(_device, &setInfo, nullptr, &_globalSetLayout);
 
-	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData) + sizeof(GPUCameraData));
+	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(ShaderInputs));
 	_frameData.globalFrameDataBuffer = create_buffer(sceneParamBufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
 
 	//allocate one descriptor set for this frame
@@ -65,26 +63,19 @@ void VulkanEngine::init_uniform_buffer_descriptors()
 	vkAllocateDescriptorSets(_device, &allocInfo, &_frameData.globalDescriptor);
 
 	//information about the buffer we want to point at in the descriptor
-	VkDescriptorBufferInfo cameraInfo;
-	cameraInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
-	cameraInfo.offset = 0;
-	cameraInfo.range = sizeof(GPUCameraData);
-
 	VkDescriptorBufferInfo sceneInfo;
 	//it will be the camera buffer
 	sceneInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
 	//at 0 offset
-	sceneInfo.offset = pad_uniform_buffer_size(sizeof(GlobalData));
+	sceneInfo.offset = 0;
 	//of the size of a global data struct
-	sceneInfo.range = sizeof(GlobalData);
+	sceneInfo.range = sizeof(ShaderInputs);
 
-	VkWriteDescriptorSet cameraWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &cameraInfo, 0);
+	VkWriteDescriptorSet sceneWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &sceneInfo, 0);
 
-	VkWriteDescriptorSet sceneWrite = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, _frameData.globalDescriptor, &sceneInfo, 1);
+	VkWriteDescriptorSet setWrites[] = { sceneWrite };
 
-	VkWriteDescriptorSet setWrites[] = { cameraWrite, sceneWrite };
-
-	vkUpdateDescriptorSets(_device, 2, setWrites, 0, nullptr);
+	vkUpdateDescriptorSets(_device, 1, setWrites, 0, nullptr);
 }
 
 void VulkanEngine::init_texture_descriptors()
