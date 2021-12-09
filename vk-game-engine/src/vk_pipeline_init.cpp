@@ -54,10 +54,9 @@ bool VulkanEngine::load_shader_module(const char* filePath, VkShaderModule* outS
 	return true;
 }
 
-void VulkanEngine::init_pipelines()
+void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule)
 {
-	VkShaderModule quadFragShader;
-	if (!load_shader_module(FRAG_SHADER_LOCATION, &quadFragShader))
+	if (!load_shader_module(FRAG_SHADER_LOCATION, &outFragmentShaderModule))
 	{
 		std::cout << "Error when building the quads fragment shader module" << std::endl;
 	}
@@ -66,8 +65,7 @@ void VulkanEngine::init_pipelines()
 		std::cout << "Quad fragment shader successfully loaded" << std::endl;
 	}
 
-	VkShaderModule quadVertexShader;
-	if (!load_shader_module(VERT_SHADER_LOCATION, &quadVertexShader))
+	if (!load_shader_module(VERT_SHADER_LOCATION, &outVertexShaderModule))
 	{
 		std::cout << "Error when building the quad vertex shader module" << std::endl;
 
@@ -76,18 +74,18 @@ void VulkanEngine::init_pipelines()
 	{
 		std::cout << "Quad vertex shader successfully loaded" << std::endl;
 	}
+}
 
-	//build the pipeline layout that controls the inputs/outputs of the shader
-	//we are not using descriptor sets or other systems yet, so no need to use anything other than empty default
-	VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
+void VulkanEngine::init_pipelines()
+{
+	VkShaderModule quadFragShader;
 
-	VkDescriptorSetLayout layouts[] = { _globalSetLayout, _singleTextureSetLayout };
+	VkShaderModule quadVertexShader;
 
-	pipeline_layout_info.setLayoutCount = 2;
-	pipeline_layout_info.pSetLayouts = layouts;
+	create_shader_modules(quadVertexShader, quadFragShader);
 
-	VK_CHECK(vkCreatePipelineLayout(_device, &pipeline_layout_info, nullptr, &_quadPipelineLayout));
-
+	build_pipeline_layout();
+	
 	//build the stage-create-info for both vertex and fragment stages. This lets the pipeline know the shader modules per stage
 	PipelineBuilder pipelineBuilder;
 
@@ -138,4 +136,19 @@ void VulkanEngine::init_pipelines()
 
 	//finally build the pipeline
 	_quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
+	create_material(_quadPipeline, _quadPipelineLayout, "quad");
 };
+
+void VulkanEngine::build_pipeline_layout()
+{
+	//build the pipeline layout that controls the inputs/outputs of the shader
+	//we are not using descriptor sets or other systems yet, so no need to use anything other than empty default
+	VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
+
+	VkDescriptorSetLayout layouts[] = { _globalSetLayout, _objectSetLayout, _singleTextureSetLayout  };
+
+	pipeline_layout_info.setLayoutCount = 3;
+	pipeline_layout_info.pSetLayouts = layouts;
+
+	VK_CHECK(vkCreatePipelineLayout(_device, &pipeline_layout_info, nullptr, &_quadPipelineLayout));
+}

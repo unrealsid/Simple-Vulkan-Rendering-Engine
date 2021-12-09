@@ -2,11 +2,14 @@
 
 #include <vulkan/vulkan.h>
 #include <vector>
-#include <vk_mem_alloc.h>
 #include <functional>
+#include <unordered_map>
+#include <vk_mem_alloc.h>
 #include "vk_mesh.h"
 #include "vk_frame_data.h"
 #include "vk_global_data.h"
+#include "vk_scene_object.h"
+#include "vk_types.h"
 
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
@@ -89,6 +92,8 @@ public:
 	GPUCameraData _cameraData;
 
 	VkDescriptorSetLayout _globalSetLayout;
+	VkDescriptorSetLayout _objectSetLayout;
+
 	VkDescriptorPool _descriptorPool;
 
 	VkPhysicalDeviceProperties _gpuProperties;
@@ -101,6 +106,25 @@ public:
 	void immediate_submit(std::function<void(VkCommandBuffer cmd)>&& function);
 
 	VkDescriptorSetLayout _singleTextureSetLayout;
+
+	std::vector<RenderObject> _renderables;
+
+	std::unordered_map<std::string, Material> _materials;
+	std::unordered_map<std::string, Mesh> _meshes;
+	//functions
+
+	//create material and add it to the map
+	Material* create_material(VkPipeline pipeline, VkPipelineLayout layout, const std::string& name);
+
+	//returns nullptr if it can't be found
+	Material* get_material(const std::string& name);
+
+	//returns nullptr if it can't be found
+	Mesh* get_mesh(const std::string& name);
+
+	//our draw function
+	void draw_objects(VkCommandBuffer cmd, RenderObject* first, int count);
+
 
 private:
 	void init_vulkan();
@@ -115,6 +139,8 @@ private:
 
 	bool load_shader_module(const char* filePath, VkShaderModule* outShaderModule);
 
+	void create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule);
+
 	void init_default_renderpass();
 
 	void init_framebuffers();
@@ -127,6 +153,10 @@ private:
 
 	void init_texture_descriptors();
 
+	void init_storage_buffers();
+
+	void init_scene();
+
 	size_t pad_uniform_buffer_size(size_t originalSize);
 
 	void load_meshes();
@@ -136,4 +166,6 @@ private:
 	void upload_mesh(Mesh& mesh);
 	
 	void update_descriptors();
+
+	void build_pipeline_layout();
 };

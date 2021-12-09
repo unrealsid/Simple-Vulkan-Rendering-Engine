@@ -2,6 +2,7 @@
 #include <iostream>
 #include "vk_global_data.h"
 #include "vk_initializers.h"
+#include "vk_shader_config.h"
 
 void VulkanEngine::init_descriptors()
 {
@@ -9,7 +10,9 @@ void VulkanEngine::init_descriptors()
 	std::vector<VkDescriptorPoolSize> sizes =
 	{
 		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 10 }, 
-		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 10 }
+		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 10 }, 
+		{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 10 }
+
 	};
 
 	VkDescriptorPoolCreateInfo pool_info = {};
@@ -22,6 +25,8 @@ void VulkanEngine::init_descriptors()
 	vkCreateDescriptorPool(_device, &pool_info, nullptr, &_descriptorPool);
 
 	init_uniform_buffer_descriptors();
+
+	init_storage_buffers();
 
 	init_texture_descriptors();
 }
@@ -126,6 +131,39 @@ void VulkanEngine::init_texture_descriptors()
 	VkWriteDescriptorSet texture1 = vkinit::write_descriptor_image(VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, textureSet, &imageBufferInfo, 0);
 
 	vkUpdateDescriptorSets(_device, 1, &texture1, 0, nullptr);
+}
+
+void VulkanEngine::init_storage_buffers()
+{
+	VkDescriptorSetLayoutBinding objectBufferBinding = vkinit::descriptorset_layout_binding(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, VK_SHADER_STAGE_VERTEX_BIT, 0);
+
+	VkDescriptorSetLayoutCreateInfo objectDescriptorInfo = {};
+	objectDescriptorInfo.bindingCount = 1;
+	objectDescriptorInfo.flags = 0;
+	objectDescriptorInfo.pNext = nullptr;
+	objectDescriptorInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	objectDescriptorInfo.pBindings = &objectBufferBinding;
+
+	vkCreateDescriptorSetLayout(_device, &objectDescriptorInfo, nullptr, &_objectSetLayout);
+
+	_frameData.objectBuffer = create_buffer(sizeof(GPUObjectData) * MAX_OBJECTS, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
+
+	VkDescriptorSetAllocateInfo objectDescAllocationInfo = {};
+	objectDescAllocationInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+	objectDescAllocationInfo.descriptorPool = _descriptorPool;
+	objectDescAllocationInfo.descriptorSetCount = 1;
+	objectDescAllocationInfo.pSetLayouts = &_objectSetLayout;
+
+	vkAllocateDescriptorSets(_device, &objectDescAllocationInfo, &_frameData.objectDescriptor);
+
+	VkDescriptorBufferInfo objectBufferInfo;
+	objectBufferInfo.buffer = _frameData.objectBuffer._buffer;
+	objectBufferInfo.offset = 0;
+	objectBufferInfo.range = sizeof(sizeof(GPUObjectData) * MAX_OBJECTS);
+
+	VkWriteDescriptorSet objectSet = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, _frameData.objectDescriptor, &objectBufferInfo, 0);
+
+	vkUpdateDescriptorSets(_device, 1, &objectSet, 0, nullptr);
 }
 
 size_t VulkanEngine::pad_uniform_buffer_size(size_t originalSize)

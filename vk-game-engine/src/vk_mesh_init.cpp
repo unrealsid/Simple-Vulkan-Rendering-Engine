@@ -1,5 +1,6 @@
 #include "vk_game_engine.h"
 #include <iostream>
+#include "vk_initializers.h"
 
 void VulkanEngine::load_meshes()
 {
@@ -32,8 +33,10 @@ void VulkanEngine::load_meshes()
 	_quadMesh._vertices[4].uv = {1.0f, 1.0f};
 	_quadMesh._vertices[5].uv = {1.0f, 0.0f};
 
+	_meshes["quad"] = _quadMesh;
+
 	//we don't care about the vertex normals
-	upload_mesh(_quadMesh);
+	upload_mesh(_meshes["quad"]);
 }
 
 void VulkanEngine::upload_mesh(Mesh& mesh)

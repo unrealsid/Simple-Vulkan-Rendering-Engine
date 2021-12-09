@@ -49,6 +49,8 @@ void VulkanEngine::init()
 
 	load_meshes();
 
+	init_scene();
+
 	//everything went fine
 	_isInitialized = true;
 }
@@ -136,11 +138,11 @@ void VulkanEngine::draw()
 
 	VkDeviceSize offset = 0;
 
-	vkCmdBindVertexBuffers(cmd, 0, 1, &_quadMesh._vertexBuffer._buffer, &offset);
+	//vkCmdBindVertexBuffers(cmd, 0, 1, &_quadMesh._vertexBuffer._buffer, &offset);
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 0, 1, &_frameData.globalDescriptor, 0, nullptr);
-	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 1, 1, &textureSet, 0, nullptr);
+	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 2, 1, &textureSet, 0, nullptr);
 
-	vkCmdDraw(cmd, _quadMesh._vertices.size(), 1, 0, 0);
+	draw_objects(cmd, _renderables.data(), _renderables.size());
 
 	//finalize the render pass
 	vkCmdEndRenderPass(cmd);

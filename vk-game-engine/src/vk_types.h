@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vulkan/vulkan.h>
 #include <vk_mem_alloc.h>
 
 struct AllocatedBuffer
@@ -14,14 +15,14 @@ struct AllocatedImage
 	VmaAllocation _allocation;
 };
 
+struct UploadContext
+{
+	VkFence _uploadFence;
+	VkCommandPool _commandPool;
+};
+
 struct Texture
 {
 	AllocatedImage image;
 	VkImageView imageView;
-};
-
-struct UploadContext 
-{
-	VkFence _uploadFence;
-	VkCommandPool _commandPool;
 };

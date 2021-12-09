@@ -31,6 +31,7 @@
     <ClCompile Include="src\vk_mesh_init.cpp" />
     <ClCompile Include="src\vk_pipeline_builder.cpp" />
     <ClCompile Include="src\vk_pipeline_init.cpp" />
+    <ClCompile Include="src\vk_scene_object_setup.cpp" />
     <ClCompile Include="src\vk_textures.cpp" />
     <ClCompile Include="src\vk_types.cpp" />
   </ItemGroup>

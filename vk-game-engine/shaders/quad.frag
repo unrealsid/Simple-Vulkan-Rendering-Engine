@@ -9,15 +9,15 @@ layout(set = 0, binding = 1) uniform GlobalData
 	float time;
 } globalData;
 
-layout( set = 1, binding = 0) uniform sampler2D imgTexture;
+layout( set = 2, binding = 0) uniform sampler2D imgTexture;
 
 //output write
 layout (location = 0) out vec4 outFragColor;
 
 void main()
 {
-	//outFragColor = vec4(inColor + vec3(globalData.time), 1.0f);
+	outFragColor = vec4(inColor + vec3(globalData.time), 1.0f);
 
-	vec3 color = texture(imgTexture, inUV).xyz;
-	outFragColor = vec4(color, 1.0f);
+	//vec3 color = texture(imgTexture, inUV).xyz;
+	//outFragColor = vec4(color, 1.0f);
 }

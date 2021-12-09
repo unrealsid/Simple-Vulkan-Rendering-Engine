@@ -10,9 +10,12 @@ struct GlobalData
 //Stores camera transforms
 struct GPUCameraData
 {
-	glm::mat4 view = glm::mat4();
-	glm::mat4 projection = glm::mat4();
-	glm::mat4 viewprojection = glm::mat4();
+	glm::mat4 view;
+	glm::mat4 projection;
+	glm::mat4 viewprojection;
+};
 
-	glm::vec4 translation = glm::vec4();
+struct GPUObjectData
+{
+	glm::mat4 modelMatrix;
 };
