@@ -16,8 +16,8 @@ layout (location = 0) out vec4 outFragColor;
 
 void main()
 {
-	//outFragColor = vec4(inColor + vec3(globalData.time), 1.0f);
+	//outFragColor = vec4(inColor, 1.0f);
 
-	vec3 color = texture(imgTexture, inUV).xyz;
+	vec3 color = texture(imgTexture, inUV).xyz + globalData.time.x;
 	outFragColor = vec4(color, 1.0f);
 }

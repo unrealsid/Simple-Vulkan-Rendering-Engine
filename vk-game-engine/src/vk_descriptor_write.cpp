@@ -18,14 +18,16 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	glm::mat4 view = glm::translate(glm::mat4{1.0f}, camPos);
 
 	//camera projection
-	//glm::mat4 projection = glm::ortho(0.0f, 1.0f / (float) _windowExtent.width, 1.0f / (float) _windowExtent.height, 0.0f, -1000.0f, 1000.0f);
+	float aspectRatio = static_cast<float>(_windowExtent.width) / static_cast<float>(_windowExtent.height);
+
+	glm::mat4 projection = glm::ortho(-aspectRatio, aspectRatio, -1.0f, 1.0f, -1.0f, 1.0f);
 
 	//camera projection
-	glm::mat4 projection = glm::perspective(glm::radians(70.f), 1700.f / 900.f, 0.1f, 200.0f);
+	//glm::mat4 projection = glm::perspective(glm::radians(70.f), 1700.f / 900.f, 0.1f, 200.0f);
 
 	_cameraData.view = view;
 	_cameraData.projection = projection;
-	_cameraData.viewprojection = glm::mat4(1.0f);
+	_cameraData.viewprojection = projection * view;
 
 	memcpy(vertexData, &_cameraData, sizeof(GPUCameraData));
 
@@ -37,9 +39,9 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, (void**)&fragmentData);
 
 	GlobalData frameData;
-	frameData.time.x = 1;
+	frameData.time.x = sine;
 
-	fragmentData += pad_uniform_buffer_size(sizeof(GlobalData));
+	fragmentData += pad_uniform_buffer_size(sizeof(GPUCameraData));
 	memcpy(fragmentData, &frameData, sizeof(GlobalData));
 
 	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);

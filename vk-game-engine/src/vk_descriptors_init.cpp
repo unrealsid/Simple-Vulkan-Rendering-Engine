@@ -53,7 +53,7 @@ void VulkanEngine::init_uniform_buffer_descriptors()
 
 	vkCreateDescriptorSetLayout(_device, &setInfo, nullptr, &_globalSetLayout);
 
-	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData) + sizeof(GPUCameraData));
+	const size_t sceneParamBufferSize = pad_uniform_buffer_size(sizeof(GlobalData)) + pad_uniform_buffer_size(sizeof(GPUCameraData));
 	_frameData.globalFrameDataBuffer = create_buffer(sceneParamBufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VMA_MEMORY_USAGE_CPU_TO_GPU);
 
 	//allocate one descriptor set for this frame
@@ -79,7 +79,7 @@ void VulkanEngine::init_uniform_buffer_descriptors()
 	//it will be the camera buffer
 	sceneInfo.buffer = _frameData.globalFrameDataBuffer._buffer;
 	//at 0 offset
-	sceneInfo.offset = pad_uniform_buffer_size(sizeof(GlobalData));
+	sceneInfo.offset = pad_uniform_buffer_size(sizeof(GPUCameraData));
 	//of the size of a global data struct
 	sceneInfo.range = sizeof(GlobalData);
 
