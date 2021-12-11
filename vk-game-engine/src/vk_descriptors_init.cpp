@@ -159,7 +159,7 @@ void VulkanEngine::init_storage_buffers()
 	VkDescriptorBufferInfo objectBufferInfo;
 	objectBufferInfo.buffer = _frameData.objectBuffer._buffer;
 	objectBufferInfo.offset = 0;
-	objectBufferInfo.range = sizeof(sizeof(GPUObjectData) * MAX_OBJECTS);
+	objectBufferInfo.range = sizeof(GPUObjectData) * MAX_OBJECTS;
 
 	VkWriteDescriptorSet objectSet = vkinit::write_descriptor_buffer(VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, _frameData.objectDescriptor, &objectBufferInfo, 0);
 

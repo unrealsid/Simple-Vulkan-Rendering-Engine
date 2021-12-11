@@ -1,5 +1,6 @@
 #include "vk_game_engine.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 Material* VulkanEngine::create_material(VkPipeline pipeline, VkPipelineLayout layout, const std::string& name)
 {
@@ -46,9 +47,22 @@ void VulkanEngine::init_scene()
 	quadObject.material = get_material("quad");
 	quadObject.mesh = get_mesh("quad");
 
-	auto translation = glm::translate(glm::mat4{ 1.0 }, glm::vec3(0, 0, 0));
-	auto scale = glm::scale(glm::mat4{ 1.0 }, glm::vec3(1000.0));
-	quadObject.transformMatrix = scale;
+	auto translation = glm::translate(glm::mat4{ 1.0 }, glm::vec3(0));
+	auto scale = glm::scale(glm::mat4{ 1.0 }, glm::vec3(1.1));
+
+	/*float aaa[16] = 
+	{
+		1, 1, 1, 1,
+		1, 1, 1, 1,
+		1, 1, 1, 1,
+		1, 1, 1, 1
+	};
+
+	glm::mat4 bbb;
+
+	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));*/
+
+	quadObject.transformMatrix = glm::mat4{1.0f};
 
 	_renderables.push_back(quadObject);
 }
@@ -57,6 +71,19 @@ void VulkanEngine::draw_objects(VkCommandBuffer cmd, RenderObject* first, int co
 {
 	Mesh* lastMesh = nullptr;
 	Material* lastMaterial = nullptr;
+
+	void* objectData;
+	vmaMapMemory(_allocator, _frameData.objectBuffer._allocation, &objectData);
+
+	GPUObjectData* objectSSBO = (GPUObjectData*)objectData;
+
+	for (int i = 0; i < count; i++)
+	{
+		objectSSBO[i].modelMatrix = first[i].transformMatrix;
+	}
+
+	vmaUnmapMemory(_allocator, _frameData.objectBuffer._allocation);
+
 	for (int i = 0; i < count; i++)
 	{
 		RenderObject& object = first[i];
@@ -69,15 +96,6 @@ void VulkanEngine::draw_objects(VkCommandBuffer cmd, RenderObject* first, int co
 
 			vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, object.material->pipelineLayout, 1, 1, &_frameData.objectDescriptor, 0, nullptr);
 		}
-
-		void* objectData;
-		vmaMapMemory(_allocator, _frameData.objectBuffer._allocation, &objectData);
-
-		GPUObjectData* objectSSBO = (GPUObjectData*) objectData;
-		
-		objectSSBO[i].modelMatrix = object.transformMatrix;
-
-		vmaUnmapMemory(_allocator, _frameData.objectBuffer._allocation);
 
 		//only bind the mesh if it's a different one from last bind
 		if (object.mesh != lastMesh) 

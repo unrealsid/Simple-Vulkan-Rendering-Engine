@@ -11,6 +11,8 @@
 #include "vk_scene_object.h"
 #include "vk_types.h"
 
+#define GLM_FORCE_DEPTH_ZERO_TO_ONE 1
+
 //we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
 #define VK_CHECK(x)                                                 \
 	do                                                              \
@@ -165,7 +167,7 @@ private:
 
 	void upload_mesh(Mesh& mesh);
 	
-	void update_descriptors();
+	void update_descriptors(VkCommandBuffer cmd);
 
 	void build_pipeline_layout();
 };

@@ -33,7 +33,9 @@ void main()
 	
 	//output the position of each vertex
 	mat4 modelMatrix = objectBuffer.objects[gl_BaseInstance].model;
+
 	mat4 transformMatrix = (cameraData.projection * cameraData.view * modelMatrix);
+
 	gl_Position = transformMatrix * vec4(vPosition, 1.0f);
 
 	outColor = vColor;
