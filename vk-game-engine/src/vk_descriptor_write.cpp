@@ -1,5 +1,6 @@
 #include "vk_game_engine.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/glm.hpp>
 
 void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 {
@@ -39,9 +40,14 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, (void**)&fragmentData);
 
 	GlobalData frameData;
-	frameData.time.x = sine;
-	frameData.textureIdx.x = 0.0;
 
+	auto current_time = std::chrono::high_resolution_clock::now();
+	auto seconds = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - appStartTime).count();
+
+	frameData.time.x = seconds * 0.001;
+	frameData.textureIdx.x = 1.0;
+	frameData.resolution = glm::vec4(_windowExtent.width, _windowExtent.height, 0.0, 0.0);
+	 
 	fragmentData += pad_uniform_buffer_size(sizeof(GPUCameraData));
 	memcpy(fragmentData, &frameData, sizeof(GlobalData));
 

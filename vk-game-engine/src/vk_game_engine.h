@@ -10,6 +10,7 @@
 #include "vk_global_data.h"
 #include "vk_scene_object.h"
 #include "vk_types.h"
+#include <chrono>
 
 #define GLM_FORCE_DEPTH_ZERO_TO_ONE 1
 
@@ -127,6 +128,7 @@ public:
 	//our draw function
 	void draw_objects(VkCommandBuffer cmd, RenderObject* first, int count);
 
+	std::chrono::steady_clock::time_point appStartTime;
 
 private:
 	void init_vulkan();

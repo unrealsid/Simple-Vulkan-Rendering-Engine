@@ -25,7 +25,7 @@ void VulkanEngine::load_images()
 
 void VulkanEngine::init_texture_descriptors(RenderObject* object)
 {
-	VkSamplerCreateInfo samplerInfo = vkinit::sampler_create_info(VK_FILTER_NEAREST);
+	VkSamplerCreateInfo samplerInfo = vkinit::sampler_create_info(VK_FILTER_LINEAR);
 
 	vkCreateSampler(_device, &samplerInfo, nullptr, &object->material->textureAsset.sampler);
 	

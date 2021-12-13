@@ -60,8 +60,9 @@ void VulkanEngine::init_scene()
 	RenderObject quadObject;
 
 	TextureAsset textureData;
-	textureData.paths.push_back(TEXTURE_LOCATION);
-	textureData.descriptorImageInfos.resize(1);
+	textureData.paths.push_back(TEXTURE_NOISE_LOCATION);
+	textureData.paths.push_back(TEXTURE_NOISE_LOCATION2);
+	textureData.descriptorImageInfos.resize(2);
 
 	quadObject.material = create_or_update_material(nullptr, nullptr, &textureData, "quad");
 	quadObject.mesh = get_mesh("quad");

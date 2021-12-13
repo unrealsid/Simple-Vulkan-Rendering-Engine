@@ -50,6 +50,7 @@
     <ClInclude Include="src\vk_types.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\dusty_nebula_1.frag" />
     <None Include="shaders\quad.frag" />
     <None Include="shaders\quad.vert" />
   </ItemGroup>

@@ -112,5 +112,8 @@
     <None Include="shaders\quad.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\dusty_nebula_1.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

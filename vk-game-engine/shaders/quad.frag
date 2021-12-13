@@ -15,7 +15,7 @@ layout(set = 0, binding = 1) uniform GlobalData
 } globalData;
 
 layout(set = 2, binding = 0) uniform sampler samplerObj;
-layout(set = 2, binding = 1) uniform texture2D textures[1];
+layout(set = 2, binding = 1) uniform texture2D textures[2];
 
 void main()
 {
