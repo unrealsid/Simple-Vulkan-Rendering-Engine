@@ -5,5 +5,6 @@
 #define TEXTURE_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\texture.jpg"
 
 #define MAX_OBJECTS 100
+#define TEXTURE_ARRAY_SIZE 8
 
 //C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\

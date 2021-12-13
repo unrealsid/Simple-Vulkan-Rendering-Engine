@@ -66,6 +66,9 @@
     <ClCompile Include="src\vk_scene_object_setup.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\vk_texture_init.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vk_initializers.h">
@@ -96,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\vk_textures.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\vk_scene_object.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

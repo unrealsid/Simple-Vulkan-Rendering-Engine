@@ -25,4 +25,9 @@ struct Texture
 {
 	AllocatedImage image;
 	VkImageView imageView;
+	VkFormat format;
+
+	uint32_t textureWidth;
+	uint32_t textureHeight;
+	uint32_t channelCount;
 };

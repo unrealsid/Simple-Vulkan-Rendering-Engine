@@ -2,12 +2,27 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-Material* VulkanEngine::create_material(VkPipeline pipeline, VkPipelineLayout layout, const std::string& name)
+Material* VulkanEngine::create_or_update_material(VkPipeline pipeline, VkPipelineLayout layout, TextureAsset* textureData, const std::string& name)
 {
 	Material mat;
-	mat.pipeline = pipeline;
-	mat.pipelineLayout = layout;
-	_materials[name] = mat;
+	if (auto ExistingMat = get_material(name))
+	{
+		ExistingMat->pipeline = pipeline;
+		ExistingMat->pipelineLayout = layout;
+
+		if (textureData != nullptr)
+		{
+			mat.textureAsset = *textureData;
+		}
+	}
+	else
+	{
+		mat.pipeline = pipeline;
+		mat.pipelineLayout = layout;
+		mat.textureAsset = *textureData;
+		_materials[name] = mat;
+	}
+	
 	return &_materials[name];
 }
 
@@ -44,7 +59,11 @@ void VulkanEngine::init_scene()
 {
 	RenderObject quadObject;
 
-	quadObject.material = get_material("quad");
+	TextureAsset textureData;
+	textureData.paths.push_back(TEXTURE_LOCATION);
+	textureData.descriptorImageInfos.resize(1);
+
+	quadObject.material = create_or_update_material(nullptr, nullptr, &textureData, "quad");
 	quadObject.mesh = get_mesh("quad");
 
 	auto translation = glm::translate(glm::mat4{ 1.0 }, glm::vec3(0));

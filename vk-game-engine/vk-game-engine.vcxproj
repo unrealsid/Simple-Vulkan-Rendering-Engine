@@ -33,12 +33,14 @@
     <ClCompile Include="src\vk_pipeline_init.cpp" />
     <ClCompile Include="src\vk_scene_object_setup.cpp" />
     <ClCompile Include="src\vk_textures.cpp" />
+    <ClCompile Include="src\vk_texture_init.cpp" />
     <ClCompile Include="src\vk_types.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Libraries\vk-bootstrap-master\vk-bootstrap-master\src\VkBootstrap.h" />
     <ClInclude Include="src\vk_frame_data.h" />
     <ClInclude Include="src\vk_global_data.h" />
+    <ClInclude Include="src\vk_scene_object.h" />
     <ClInclude Include="src\vk_shader_config.h" />
     <ClInclude Include="src\vk_game_engine.h" />
     <ClInclude Include="src\vk_initializers.h" />

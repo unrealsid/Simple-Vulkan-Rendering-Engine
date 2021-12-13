@@ -116,7 +116,7 @@ public:
 	//functions
 
 	//create material and add it to the map
-	Material* create_material(VkPipeline pipeline, VkPipelineLayout layout, const std::string& name);
+	Material* create_or_update_material(VkPipeline pipeline, VkPipelineLayout layout, TextureAsset* textureData, const std::string& name);
 
 	//returns nullptr if it can't be found
 	Material* get_material(const std::string& name);
@@ -155,6 +155,8 @@ private:
 
 	void init_texture_descriptors();
 
+	void init_texture_descriptors(RenderObject* object);
+
 	void init_storage_buffers();
 
 	void init_scene();
@@ -162,6 +164,8 @@ private:
 	size_t pad_uniform_buffer_size(size_t originalSize);
 
 	void load_meshes();
+
+	void load_image();
 
 	void load_images();
 

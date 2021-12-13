@@ -85,7 +85,7 @@ void VulkanEngine::init_pipelines()
 	create_shader_modules(quadVertexShader, quadFragShader);
 
 	build_pipeline_layout();
-	
+
 	//build the stage-create-info for both vertex and fragment stages. This lets the pipeline know the shader modules per stage
 	PipelineBuilder pipelineBuilder;
 
@@ -136,7 +136,7 @@ void VulkanEngine::init_pipelines()
 
 	//finally build the pipeline
 	_quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
-	create_material(_quadPipeline, _quadPipelineLayout, "quad");
+	create_or_update_material(_quadPipeline, _quadPipelineLayout, nullptr, "quad");
 };
 
 void VulkanEngine::build_pipeline_layout()
@@ -145,7 +145,7 @@ void VulkanEngine::build_pipeline_layout()
 	//we are not using descriptor sets or other systems yet, so no need to use anything other than empty default
 	VkPipelineLayoutCreateInfo pipeline_layout_info = vkinit::pipeline_layout_create_info();
 
-	VkDescriptorSetLayout layouts[] = { _globalSetLayout, _objectSetLayout, _singleTextureSetLayout  };
+	VkDescriptorSetLayout layouts[] = { _globalSetLayout, _objectSetLayout, _renderables[0].material->textureAsset.textureLayout };
 
 	pipeline_layout_info.setLayoutCount = 3;
 	pipeline_layout_info.pSetLayouts = layouts;

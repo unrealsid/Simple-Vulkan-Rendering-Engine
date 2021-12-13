@@ -41,15 +41,15 @@ void VulkanEngine::init()
 
 	init_sync_structures();
 
+	load_meshes();
+
+	init_scene();
+
 	load_images();
 
 	init_descriptors();
 
 	init_pipelines();
-
-	load_meshes();
-
-	init_scene();
 
 	//everything went fine
 	_isInitialized = true;

@@ -10,9 +10,9 @@ void VulkanEngine::init_descriptors()
 	std::vector<VkDescriptorPoolSize> sizes =
 	{
 		{ VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER, 10 }, 
-		{ VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, 10 }, 
+		{ VK_DESCRIPTOR_TYPE_SAMPLER, 10 }, 
+		{ VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE, 10},
 		{ VK_DESCRIPTOR_TYPE_STORAGE_BUFFER, 10 }
-
 	};
 
 	VkDescriptorPoolCreateInfo pool_info = {};
@@ -28,7 +28,10 @@ void VulkanEngine::init_descriptors()
 
 	init_storage_buffers();
 
-	init_texture_descriptors();
+	for (size_t i = 0; i < _renderables.size(); i++)
+	{
+		init_texture_descriptors(&_renderables[i]);
+	}
 }
 
 void VulkanEngine::init_uniform_buffer_descriptors()

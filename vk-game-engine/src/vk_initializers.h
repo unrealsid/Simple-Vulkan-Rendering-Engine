@@ -1,5 +1,6 @@
 #pragma once
 #include <vulkan/vulkan.h>
+#include "vk_scene_object.h"
 
 namespace vkinit 
 {

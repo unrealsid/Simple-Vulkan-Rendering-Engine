@@ -40,6 +40,7 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 
 	GlobalData frameData;
 	frameData.time.x = sine;
+	frameData.textureIdx.x = 0.0;
 
 	fragmentData += pad_uniform_buffer_size(sizeof(GPUCameraData));
 	memcpy(fragmentData, &frameData, sizeof(GlobalData));
@@ -47,5 +48,9 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
 
 	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 0, 1, &_frameData.globalDescriptor, 0, nullptr);
-	vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipelineLayout, 2, 1, &textureSet, 0, nullptr);
+
+	for (size_t i = 0; i < _renderables.size(); ++i)
+	{
+		vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _renderables[i].material->pipelineLayout, 2, 1, &_renderables[i].material->textureAsset.textureSet, 0, nullptr);
+	}
 }
