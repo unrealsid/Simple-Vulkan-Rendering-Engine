@@ -36,7 +36,7 @@ void main()
 
 	mat4 transformMatrix = (cameraData.projection * cameraData.view * modelMatrix);
 
-	gl_Position = transformMatrix * vec4(vPosition, 1.0f);
+	gl_Position = vec4(vPosition, 1.0f);
 
 	outColor = vColor;
 	outUVTexCoord = vUvTexCoord;

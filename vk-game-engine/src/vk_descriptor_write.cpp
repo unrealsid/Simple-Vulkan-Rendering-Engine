@@ -9,7 +9,7 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	char* vertexData;
 	vmaMapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation, (void**)&vertexData);
 
-	float sine = abs(sin(_frameNumber / 120.f));
+	
 
 	//make a model view matrix for rendering the object
 	//camera view
@@ -33,6 +33,8 @@ void VulkanEngine::update_descriptors(VkCommandBuffer cmd)
 	memcpy(vertexData, &_cameraData, sizeof(GPUCameraData));
 
 	vmaUnmapMemory(_allocator, _frameData.globalFrameDataBuffer._allocation);
+	
+	float sine = abs(sin(_frameNumber / 120.f));
 
 	//Binding 1 in the buffer
 	//Fragment

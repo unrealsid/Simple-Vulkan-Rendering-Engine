@@ -82,7 +82,7 @@ void VulkanEngine::init_scene()
 
 	memcpy(glm::value_ptr(bbb), aaa, sizeof(aaa));*/
 
-	quadObject.transformMatrix = glm::mat4{1.0f};
+	quadObject.transformMatrix = translation * scale;
 
 	_renderables.push_back(quadObject);
 }

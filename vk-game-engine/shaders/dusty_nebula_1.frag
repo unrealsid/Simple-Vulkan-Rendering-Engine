@@ -19,7 +19,7 @@ layout(set = 2, binding = 0) uniform sampler samplerObj;
 layout(set = 2, binding = 1) uniform texture2D textures[2];
 
 // change this to get different nebulas
-#define EXPLOSION_SEED 5665
+#define EXPLOSION_SEED 50097
 
 
 // the bounding sphere of the nebula. this is less general but means that

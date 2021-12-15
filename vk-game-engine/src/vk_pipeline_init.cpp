@@ -56,7 +56,16 @@ bool VulkanEngine::load_shader_module(const char* filePath, VkShaderModule* outS
 
 void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule)
 {
-	if (!load_shader_module(FRAG_SHADER_LOCATION, &outFragmentShaderModule))
+	if (!load_shader_module(MATRIX_RAIN_FRAG_SHADER_LOCATION, &outFragmentShaderModule))
+	{
+		std::cout << "Error when building the quads fragment shader module" << std::endl;
+	}
+	else
+	{
+		std::cout << "Quad fragment shader successfully loaded" << std::endl;
+	}
+
+	if (!load_shader_module(NEBULA_2_FRAG_SHADER_LOCATION, &outFragmentShaderModule))
 	{
 		std::cout << "Error when building the quads fragment shader module" << std::endl;
 	}
@@ -135,8 +144,8 @@ void VulkanEngine::init_pipelines()
 	pipelineBuilder._pipelineLayout = _quadPipelineLayout;
 
 	//finally build the pipeline
-	_quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
-	create_or_update_material(_quadPipeline, _quadPipelineLayout, nullptr, "quad");
+	auto quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
+	create_or_update_material(quadPipeline, _quadPipelineLayout, nullptr, "quad");
 };
 
 void VulkanEngine::build_pipeline_layout()

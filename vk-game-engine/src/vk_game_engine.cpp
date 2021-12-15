@@ -115,7 +115,7 @@ void VulkanEngine::draw()
 	//make a clear-color from frame number. This will flash with a 120*pi frame period.
 	VkClearValue clearValue;
 	float flash = abs(sin(_frameNumber / 120.f));
-	clearValue.color = { { 0.0f, 0.0f, 0.0f, 1.0f } };
+	clearValue.color = { { 0.0f, 0.0f, flash, 1.0f } };
 
 	//start the main renderpass.
 	//We will use the clear color from above, and the framebuffer of the index the swapchain gave us
@@ -136,8 +136,7 @@ void VulkanEngine::draw()
 	vkCmdBeginRenderPass(cmd, &rpInfo, VK_SUBPASS_CONTENTS_INLINE);
 
 	//once we start adding rendering commands, they will go here
-	vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, _quadPipeline);
-
+	
 	update_descriptors(cmd);
 	draw_objects(cmd, _renderables.data(), _renderables.size());
 
