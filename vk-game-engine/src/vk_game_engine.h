@@ -35,7 +35,7 @@ public:
 
 	int _selectedShader{ 0 };
 
-	VkExtent2D _windowExtent{ 1280 , 720 };
+	VkExtent2D _windowExtent{ 960 , 540 };
 
 	struct SDL_Window* _window{ nullptr };
 

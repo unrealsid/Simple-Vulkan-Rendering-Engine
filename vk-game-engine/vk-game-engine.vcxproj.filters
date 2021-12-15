@@ -115,5 +115,20 @@
     <None Include="shaders\dusty_nebula_1.frag">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shaders\matrix_rain.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\nebula.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\dusty_nebula_2.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\clouds.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\seascape.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
 </Project>

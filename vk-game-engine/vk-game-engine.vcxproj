@@ -50,9 +50,14 @@
     <ClInclude Include="src\vk_types.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\clouds.frag" />
     <None Include="shaders\dusty_nebula_1.frag" />
+    <None Include="shaders\dusty_nebula_2.frag" />
+    <None Include="shaders\matrix_rain.frag" />
+    <None Include="shaders\nebula.frag" />
     <None Include="shaders\quad.frag" />
     <None Include="shaders\quad.vert" />
+    <None Include="shaders\seascape.frag" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
@@ -65,14 +70,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
@@ -80,14 +85,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
     <EnableASAN>false</EnableASAN>
@@ -166,14 +171,14 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>C:\Users\siddh\Documents\Visual Studio 2019\Libraries\VulkanMemoryAllocator-master\include;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\stb-master\stb-master;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\vk-bootstrap-master\vk-bootstrap-master\example;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\vk-bootstrap-master\vk-bootstrap-master\src;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\glm;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\SDL2-2.0.16\include;C:\VulkanSDK\1.2.176.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Users\siddh\Documents\Visual Studio 2019\Libraries\VulkanMemoryAllocator-master\include;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\stb-master\stb-master;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\vk-bootstrap-master\vk-bootstrap-master\example;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\vk-bootstrap-master\vk-bootstrap-master\src;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\glm;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\SDL2-2.0.16\include;C:\VulkanSDK\1.2.198.1\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\VulkanSDK\1.2.176.1\Lib;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\VulkanSDK\1.2.198.1\Lib;C:\Users\siddh\Documents\Visual Studio 2019\Libraries\SDL2-2.0.16\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>vulkan-1.lib;SDL2.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

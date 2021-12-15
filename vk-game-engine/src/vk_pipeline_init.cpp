@@ -78,7 +78,7 @@ void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, 
 
 void VulkanEngine::init_pipelines()
 {
-	std::string frag_paths[] = { NEBULA_2_FRAG_SHADER_LOCATION, CLOUDS_FRAG_SHADER_LOCATION, MATRIX_RAIN_FRAG_SHADER_LOCATION };
+	std::string frag_paths[] = {  SEASCAPE_FRAG_SHADER_LOCATION, NEBULA_2_FRAG_SHADER_LOCATION, CLOUDS_FRAG_SHADER_LOCATION, MATRIX_RAIN_FRAG_SHADER_LOCATION };
 
 	build_pipeline_layout();
 
