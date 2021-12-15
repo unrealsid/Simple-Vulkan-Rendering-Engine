@@ -4,7 +4,11 @@
 #define FRAG_SHADER_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\quad.frag.spv"
 #define NEBULA_FRAG_SHADER_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\dusty_nebula_1.frag.spv"
 #define NEBULA_2_FRAG_SHADER_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\dusty_nebula_2.frag.spv"
+#define CLOUDS_FRAG_SHADER_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\clouds.frag.spv"
+
+
 #define MATRIX_RAIN_FRAG_SHADER_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\matrix_rain.frag.spv"
+
 #define TEXTURE_LOCATION "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\texture.jpg"
 #define TEXTURE_LOCATION2 "C:\\Users\\siddh\\Documents\\Visual Studio 2019\\Projects\\vk-simple-game-engine\\vk-game-engine\\shaders\\texture2.jpg"
 

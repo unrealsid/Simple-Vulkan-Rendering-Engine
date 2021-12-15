@@ -7,7 +7,7 @@ Material* VulkanEngine::create_or_update_material(VkPipeline pipeline, VkPipelin
 	Material mat;
 	if (auto ExistingMat = get_material(name))
 	{
-		ExistingMat->pipeline = pipeline;
+		ExistingMat->pipelines.push_back(pipeline);
 		ExistingMat->pipelineLayout = layout;
 
 		if (textureData != nullptr)
@@ -17,9 +17,21 @@ Material* VulkanEngine::create_or_update_material(VkPipeline pipeline, VkPipelin
 	}
 	else
 	{
-		mat.pipeline = pipeline;
-		mat.pipelineLayout = layout;
-		mat.textureAsset = *textureData;
+		if (pipeline != nullptr)
+		{
+			mat.pipelines.push_back(pipeline);
+		}
+		
+		if (layout != nullptr)
+		{
+			mat.pipelineLayout = layout;
+		}
+		
+		if (textureData != nullptr)
+		{
+			mat.textureAsset = *textureData;
+		}
+		
 		_materials[name] = mat;
 	}
 	
@@ -111,7 +123,7 @@ void VulkanEngine::draw_objects(VkCommandBuffer cmd, RenderObject* first, int co
 		//only bind the pipeline if it doesn't match with the already bound one
 		if (object.material != lastMaterial) 
 		{
-			vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, object.material->pipeline);
+			vkCmdBindPipeline(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, object.material->pipelines[_selectedShader]);
 			lastMaterial = object.material;
 
 			vkCmdBindDescriptorSets(cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, object.material->pipelineLayout, 1, 1, &_frameData.objectDescriptor, 0, nullptr);

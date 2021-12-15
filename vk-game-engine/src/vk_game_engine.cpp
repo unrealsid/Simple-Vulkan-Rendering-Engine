@@ -207,6 +207,22 @@ void VulkanEngine::run()
 			{
 				bQuit = true;
 			}
+			if (e.key.keysym.sym == SDLK_0 && e.key.type == SDL_KEYDOWN)
+			{
+				_selectedShader = 0;
+			}
+			else if (e.key.keysym.sym == SDLK_1 && e.key.type == SDL_KEYDOWN)
+			{
+				_selectedShader = 1;
+			}
+			else if (e.key.keysym.sym == SDLK_2 && e.key.type == SDL_KEYDOWN)
+			{
+				_selectedShader = 2;
+			}
+			else if (e.key.keysym.sym > SDLK_2 && e.key.type == SDL_KEYDOWN)
+			{
+				std::cout << "This will cause a crash!!!";
+			}
 		}
 
 		draw();

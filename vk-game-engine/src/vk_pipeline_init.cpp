@@ -54,18 +54,9 @@ bool VulkanEngine::load_shader_module(const char* filePath, VkShaderModule* outS
 	return true;
 }
 
-void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule)
+void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule, const std::string& fragShaderPath )
 {
-	if (!load_shader_module(MATRIX_RAIN_FRAG_SHADER_LOCATION, &outFragmentShaderModule))
-	{
-		std::cout << "Error when building the quads fragment shader module" << std::endl;
-	}
-	else
-	{
-		std::cout << "Quad fragment shader successfully loaded" << std::endl;
-	}
-
-	if (!load_shader_module(NEBULA_2_FRAG_SHADER_LOCATION, &outFragmentShaderModule))
+	if (!load_shader_module(fragShaderPath.c_str(), &outFragmentShaderModule))
 	{
 		std::cout << "Error when building the quads fragment shader module" << std::endl;
 	}
@@ -87,22 +78,12 @@ void VulkanEngine::create_shader_modules(VkShaderModule& outVertexShaderModule, 
 
 void VulkanEngine::init_pipelines()
 {
-	VkShaderModule quadFragShader;
-
-	VkShaderModule quadVertexShader;
-
-	create_shader_modules(quadVertexShader, quadFragShader);
+	std::string frag_paths[] = { NEBULA_2_FRAG_SHADER_LOCATION, CLOUDS_FRAG_SHADER_LOCATION, MATRIX_RAIN_FRAG_SHADER_LOCATION };
 
 	build_pipeline_layout();
 
 	//build the stage-create-info for both vertex and fragment stages. This lets the pipeline know the shader modules per stage
 	PipelineBuilder pipelineBuilder;
-
-	//build the mesh pipeline
-	pipelineBuilder._shaderStages.clear();
-	pipelineBuilder._shaderStages.push_back(vkinit::pipeline_shader_stage_create_info(VK_SHADER_STAGE_VERTEX_BIT, quadVertexShader));
-
-	pipelineBuilder._shaderStages.push_back(vkinit::pipeline_shader_stage_create_info(VK_SHADER_STAGE_FRAGMENT_BIT, quadFragShader));
 
 	//vertex input controls how to read vertices from vertex buffers. We aren't using it yet
 	pipelineBuilder._vertexInputInfo = vkinit::vertex_input_state_create_info();
@@ -143,9 +124,23 @@ void VulkanEngine::init_pipelines()
 	//use the triangle layout we created
 	pipelineBuilder._pipelineLayout = _quadPipelineLayout;
 
-	//finally build the pipeline
-	auto quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
-	create_or_update_material(quadPipeline, _quadPipelineLayout, nullptr, "quad");
+	for (const auto& path : frag_paths)
+	{
+		VkShaderModule quadFragShader;
+		VkShaderModule quadVertexShader;
+
+		create_shader_modules(quadVertexShader, quadFragShader, path);
+
+		//build the mesh pipeline
+		pipelineBuilder._shaderStages.clear();
+		pipelineBuilder._shaderStages.push_back(vkinit::pipeline_shader_stage_create_info(VK_SHADER_STAGE_VERTEX_BIT, quadVertexShader));
+
+		pipelineBuilder._shaderStages.push_back(vkinit::pipeline_shader_stage_create_info(VK_SHADER_STAGE_FRAGMENT_BIT, quadFragShader));
+
+		//finally build the pipeline
+		auto quadPipeline = pipelineBuilder.build_pipeline(_device, _renderPass);
+		create_or_update_material(quadPipeline, _quadPipelineLayout, nullptr, "quad");
+	}
 };
 
 void VulkanEngine::build_pipeline_layout()

@@ -33,7 +33,9 @@ public:
 	bool _isInitialized{ false };
 	int _frameNumber{ 0 };
 
-	VkExtent2D _windowExtent{ 800 , 600 };
+	int _selectedShader{ 0 };
+
+	VkExtent2D _windowExtent{ 1280 , 720 };
 
 	struct SDL_Window* _window{ nullptr };
 
@@ -143,7 +145,7 @@ private:
 
 	bool load_shader_module(const char* filePath, VkShaderModule* outShaderModule);
 
-	void create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule);
+	void create_shader_modules(VkShaderModule& outVertexShaderModule, VkShaderModule& outFragmentShaderModule, const std::string& fragShaderPath);
 
 	void init_default_renderpass();
 

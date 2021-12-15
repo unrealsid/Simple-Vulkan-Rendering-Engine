@@ -20,7 +20,7 @@ struct TextureAsset
 
 struct Material 
 {
-	VkPipeline pipeline;
+	std::vector<VkPipeline> pipelines;
 	VkPipelineLayout pipelineLayout;
 
 	TextureAsset textureAsset;
